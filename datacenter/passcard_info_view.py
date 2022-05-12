@@ -18,13 +18,13 @@ def passcard_info_view(request, passcode):
     serialized_passcard_visits = []
     selected_passcard_visits = Visit.objects.filter(passcard__owner_name=passcard)
     for visit in selected_passcard_visits:
-        suspicious_flag = is_visit_long(visit)
+        is_strange = is_visit_long(visit)
         entered_at = localtime(visit.entered_at)
         duration = format_duration(get_duration(visit))
         visitor = {
             'entered_at': entered_at,
             'duration': duration,
-            'is_strange': suspicious_flag
+            'is_strange': is_strange
         }
         serialized_passcard_visits.append(visitor)
     context = {
