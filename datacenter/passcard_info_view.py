@@ -14,8 +14,8 @@ def is_visit_long(visit, minutes=60):
 
 
 def passcard_info_view(request, passcode):
-    passcard = Passcard.objects.all()[0]
-    this_passcard_visits = []
+    passcard = Passcard.objects.get(passcode=passcode)
+    serialized_passcard_visits = []
     selected_passcard_visits = Visit.objects.filter(passcard__owner_name=passcard)
     for visit in selected_passcard_visits:
         suspicious_flag = is_visit_long(visit)
@@ -26,9 +26,9 @@ def passcard_info_view(request, passcode):
             'duration': duration,
             'is_strange': suspicious_flag
         }
-        this_passcard_visits.append(visitor)
+        serialized_passcard_visits.append(visitor)
     context = {
         'passcard': passcard,
-        'this_passcard_visits': this_passcard_visits
+        'this_passcard_visits': serialized_passcard_visits
     }
     return render(request, 'passcard_info.html', context)
